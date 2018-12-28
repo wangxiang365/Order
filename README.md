@@ -3,7 +3,9 @@
 ## 执行命令
 $ node src/index.js
 
-## 结合postman发送请求 / 或者直接打开页面（只适合get请求） http://localhost:3003/order/list
+结合postman发送请求
+或者直接打开页面（只适合get请求） 
+请求举例：http://localhost:3003/order/list
 
 ## 表字段
 order {
