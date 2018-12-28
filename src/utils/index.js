@@ -1,4 +1,4 @@
-const SQL = require('./sql')
+const sqlHandle = require('./sql')
 
 const getOrderList = (ctx, next) => {
     const data = ctx.params
@@ -34,10 +34,40 @@ const deleteOrderById = (ctx, next) => {
     ctx.response.body = data.id
 }
 
+const dropOneTable = (ctx, next) => {
+    const data = ctx.params
+
+    sqlHandle.dropTable(data.table)
+    .then(json => {
+        ctx.response.body = {
+          code: 200,
+          success: true,
+          data: {},
+          msg: json
+        }
+    })
+}
+
+const addOneTable = (ctx, next) => {
+    const data = ctx.params
+    
+    sqlHandle.dropTable(data.table)
+    .then(json => {
+        ctx.response.body = {
+          code: 200,
+          success: true,
+          data: {},
+          msg: json
+        }
+    })
+}
+
 module.exports = {
     getOrderList,
     getOrderById,
     editOrder,
     updateOrderById,
-    deleteOrderById
+    deleteOrderById,
+    dropOneTable,
+    addOneTable
 }
