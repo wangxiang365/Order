@@ -12,8 +12,8 @@ const getOrderById = (ctx, next) => {
     ctx.response.body = data.id
 }
 
-const createOrder = (ctx, next) => {
-    const data = ctx.params
+const editOrder = (ctx, next) => {
+    const data = ctx.query
 
     ctx.response.type = 'text'
     ctx.response.body = data
@@ -37,7 +37,7 @@ const deleteOrderById = (ctx, next) => {
 module.exports = {
     getOrderList,
     getOrderById,
-    createOrder,
+    editOrder,
     updateOrderById,
     deleteOrderById
 }
