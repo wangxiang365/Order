@@ -9,12 +9,12 @@ order.get('/list', OPERATE.getOrderList)
 order.get('/detail/:id', OPERATE.getOrderById)
 
 /* 创建 */
-order.post('/:orderInfo', OPERATE.createOrder)
+order.post('/edit/:orderInfo', OPERATE.createOrder) // 参数请求有问题
 
 /* 修改订单：已取消0、待支付1、待发货2、待收货3、待完成4 */
-order.put('/:id/:status', OPERATE.updateOrderById)
+order.put('/update/:id/:status', OPERATE.updateOrderById)
 
 /* 删除订单：删除1、正常0 */
-order.delete('/:id', OPERATE.deleteOrderById)
+order.delete('/delete/:id', OPERATE.deleteOrderById)
 
 module.exports = order
