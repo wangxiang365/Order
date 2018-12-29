@@ -1,9 +1,17 @@
-const sqlHandle = require('./sql')
+const SQL = require('./sql')
 
 const getOrderList = (ctx, next) => {
     const data = ctx.params
 
-    ctx.response.body = data
+    SQL.handleFindAll(data)
+    .then(json => {
+        ctx.response.body = {
+          code: 200,
+          success: true,
+          data: json,
+          msg: ''
+        }
+    })
 }
 
 const getOrderById = (ctx, next) => {
@@ -15,8 +23,15 @@ const getOrderById = (ctx, next) => {
 const editOrder = (ctx, next) => {
     const data = ctx.query
 
-    ctx.response.type = 'text'
-    ctx.response.body = data
+    SQL.handleCreate(data)
+    .then(json => {
+        ctx.response.body = {
+          code: 200,
+          success: true,
+          data: '',
+          msg: json
+        }
+    })
 }
 
 const updateOrderById = (ctx, next) => {
@@ -31,13 +46,23 @@ const updateOrderById = (ctx, next) => {
 const deleteOrderById = (ctx, next) => {
     const data = ctx.params
 
-    ctx.response.body = data.id
+    SQL.deleteOne({
+        id: data.id,
+        delete_flag: 1
+    }).then(json => {
+        ctx.response.body = {
+          code: 200,
+          success: true,
+          data: '',
+          msg: json
+        }
+    })
 }
 
 const dropOneTable = (ctx, next) => {
     const data = ctx.params
 
-    sqlHandle.dropTable(data.table)
+    SQL.handleDrop(data.table)
     .then(json => {
         ctx.response.body = {
           code: 200,
@@ -51,7 +76,7 @@ const dropOneTable = (ctx, next) => {
 const addOneTable = (ctx, next) => {
     const data = ctx.params
     
-    sqlHandle.dropTable(data.table)
+    SQL.handleDefine(data.table)
     .then(json => {
         ctx.response.body = {
           code: 200,
@@ -68,6 +93,6 @@ module.exports = {
     editOrder,
     updateOrderById,
     deleteOrderById,
-    dropOneTable,
-    addOneTable
+    addOneTable,
+    dropOneTable
 }

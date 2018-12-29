@@ -18,9 +18,9 @@ order.put('/update/:id/:status', OPERATE.updateOrderById)
 order.delete('/delete/:id', OPERATE.deleteOrderById)
 
 /* 测试用：添加order表 */
-order.post('/add/:table', OPERATE.addOneTable)
+order.post('/add', OPERATE.addOneTable)
 
 /* 测试用：删除order表 */
-order.delete('/drop/:table', OPERATE.dropOneTable)
+order.delete('/drop', OPERATE.dropOneTable)
 
 module.exports = order
