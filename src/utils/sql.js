@@ -3,66 +3,15 @@ const Sequelize = require('sequelize')
 const OrderInstance = require('../models/order')
 const moment = require('moment')
 
-async function handleFindAll() {
+async function handleDrop() {
     const sequelize = await DB()
     const Order = OrderInstance(sequelize, Sequelize)
 
     return new Promise((resolve, reject) => {
         Order
-            .findAll({
-                where: {
-                    delete_flag: 0
-                }
-            })
-            .then(rows => resolve(rows))
-            .catch(res => reject(res))
-    })
-}
-
-async function handleFindOne(id) {
-    const sequelize = await DB()
-    const Order = OrderInstance(sequelize, Sequelize)
-
-    return new Promise((resolve, reject) => {
-        Order
-            .findByPk(id)
-            .then(res => resolve(res ? res.dataValues : null))
-            .catch(res => reject(res))
-    })
-}
-
-async function handleCreate(param) {
-    const sequelize = await DB()
-    const Order = OrderInstance(sequelize, Sequelize)
-
-    return new Promise((resolve, reject) => {
-        Order
-            .create(param)
-            .then(res => resolve(res))
-            .catch(res => reject(res))
-    })
-}
-
-const handleEdit = (param) => handleUpdate(param)
-
-const handleDelete = (param) => handleUpdate(param)
-
-async function handleUpdate(param) {
-    const sequelize = await DB()
-    const id = param.id
-    const Order = OrderInstance(sequelize, Sequelize)
-
-    delete param.id
-
-    return new Promise((resolve, reject) => {
-        Order
-            .update(param, {
-                where: {
-                    id
-                }
-            })
-            .then(res => resolve(res))
-            .catch(res => reject(res))
+            .drop()
+            .then(() => resolve())
+            .catch(() => reject())
     })
 }
 
@@ -132,24 +81,75 @@ async function handleDefine() {
     })
 }
 
-async function handleDrop() {
+async function handleCreate(param) {
     const sequelize = await DB()
     const Order = OrderInstance(sequelize, Sequelize)
 
     return new Promise((resolve, reject) => {
         Order
-            .drop()
-            .then(() => resolve())
-            .catch(() => reject())
+            .create(param)
+            .then(res => resolve(res))
+            .catch(res => reject(res))
+    })
+}
+
+async function handleFindOne(id) {
+    const sequelize = await DB()
+    const Order = OrderInstance(sequelize, Sequelize)
+
+    return new Promise((resolve, reject) => {
+        Order
+            .findByPk(id)
+            .then(res => resolve(res ? res.dataValues : null))
+            .catch(res => reject(res))
+    })
+}
+
+const handleEdit = (param) => handleUpdate(param)
+
+const handleDelete = (param) => handleUpdate(param)
+
+async function handleUpdate(param) {
+    const sequelize = await DB()
+    const id = param.id
+    const Order = OrderInstance(sequelize, Sequelize)
+
+    delete param.id
+
+    return new Promise((resolve, reject) => {
+        Order
+            .update(param, {
+                where: {
+                    id
+                }
+            })
+            .then(res => resolve(res))
+            .catch(res => reject(res))
+    })
+}
+
+async function handleFindAll() {
+    const sequelize = await DB()
+    const Order = OrderInstance(sequelize, Sequelize)
+
+    return new Promise((resolve, reject) => {
+        Order
+            .findAll({
+                where: {
+                    delete_flag: 0
+                }
+            })
+            .then(rows => resolve(rows))
+            .catch(res => reject(res))
     })
 }
 
 module.exports = {
-    handleFindAll,
-    handleFindOne,
+    handleDrop,
+    handleDefine,
     handleCreate,
+    handleFindOne,
     handleEdit,
     handleDelete,
-    handleDefine,
-    handleDrop
+    handleFindAll
 }
