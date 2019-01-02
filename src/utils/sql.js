@@ -1,7 +1,6 @@
 const DB = require('@xm/db-handle')
 const Sequelize = require('sequelize')
 const OrderInstance = require('../models/order')
-const HANDLE = require('./handle')
 const moment = require('moment')
 
 async function handleFindAll() {
