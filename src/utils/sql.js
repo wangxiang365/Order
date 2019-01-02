@@ -103,7 +103,12 @@ async function handleFindOne(id) {
 
     return new Promise((resolve, reject) => {
         Order
-            .findByPk(id)
+            .findOne({
+                where: {
+                    id,
+                    delete_flag: 0
+                }
+            })
             .then(res => resolve(res ? res.dataValues : null))
             .catch(res => reject(res))
     })
