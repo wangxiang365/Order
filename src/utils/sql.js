@@ -84,6 +84,9 @@ async function handleDefine() {
 async function handleCreate(param) {
     const sequelize = await DB()
     const Order = OrderInstance(sequelize, Sequelize)
+    const now = new Date()
+    param.create_time = moment(now).format('YYYY-MM-DD HH:mm:ss')
+    param.update_time = moment(now).format('YYYY-MM-DD HH:mm:ss')
 
     return new Promise((resolve, reject) => {
         Order
@@ -113,6 +116,7 @@ async function handleUpdate(param) {
     const sequelize = await DB()
     const id = param.id
     const Order = OrderInstance(sequelize, Sequelize)
+    param.update_time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
 
     delete param.id
 
