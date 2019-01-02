@@ -81,14 +81,11 @@ async function getOrderById(ctx) {
 }
 
 async function updateOrderById(ctx) {
-    const data = ctx.params
+    const data = ctx.query
     ctx.response.type = 'json'
 
     await SQL
-        .handleEdit({
-            id: data.id,
-            status: data.status
-        }).then(json => {
+        .handleEdit(data).then(json => {
             ctx.body = {
                 code: 200,
                 success: true,

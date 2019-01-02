@@ -12,7 +12,7 @@ order.get('/detail/:id', OPERATE.getOrderById)
 order.post('/edit', OPERATE.createOrder)
 
 /* 修改订单：已取消0、待支付1、待发货2、待收货3、待完成4 */
-order.put('/update/:id/:status', OPERATE.updateOrderById)
+order.put('/update', OPERATE.updateOrderById)
 
 /* 删除订单：删除1、正常0 */
 order.delete('/delete/:id', OPERATE.deleteOrderById)
