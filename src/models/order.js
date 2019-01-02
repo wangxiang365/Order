@@ -5,8 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      defaultValue: '0',
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     status: {
       type: DataTypes.STRING(255),

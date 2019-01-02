@@ -23,7 +23,8 @@ async function handleDefine() {
             field: 'id',
             primaryKey: true,
             type: Sequelize.BIGINT,
-            allowNull: true
+            allowNull: true,
+            autoIncrement: true
         },
         status: {
             field: 'status',
@@ -105,12 +106,6 @@ async function handleFindOne(id) {
             .findByPk(id)
             .then(res => resolve(res ? res.dataValues : null))
             .catch(res => reject(res))
-        // sequelize
-        //     .query('select * from order where id = ? & delete_flag = ?', {
-        //         replacements: [id, '0']
-        //     })
-        //     .then(res => resolve(res ? res.dataValues : null))
-        //     .catch(res => reject(res))
     })
 }
 
