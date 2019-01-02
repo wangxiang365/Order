@@ -132,7 +132,8 @@ async function handleUpdate(param) {
     })
 }
 
-async function handleFindAll() {
+async function handleFindAll(param) {
+    const {pageIndex = 1, pageSize = 10} = param
     const sequelize = await DB()
     const Order = OrderInstance(sequelize, Sequelize)
 
@@ -141,7 +142,9 @@ async function handleFindAll() {
             .findAll({
                 where: {
                     delete_flag: 0
-                }
+                },
+                limit: pageSize,
+                offset: (pageIndex - 1) * pageSize
             })
             .then(rows => resolve(rows))
             .catch(res => reject(res))
