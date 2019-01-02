@@ -42,6 +42,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'order',
-    timestamps: false,
+      timestamps: false
   });
 };

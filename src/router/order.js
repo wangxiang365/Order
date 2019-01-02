@@ -9,7 +9,7 @@ order.get('/list', OPERATE.getOrderList)
 order.get('/detail/:id', OPERATE.getOrderById)
 
 /* 创建 */
-order.post('/edit', OPERATE.editOrder)
+order.post('/edit', OPERATE.createOrder)
 
 /* 修改订单：已取消0、待支付1、待发货2、待收货3、待完成4 */
 order.put('/update/:id/:status', OPERATE.updateOrderById)

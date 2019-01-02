@@ -4,177 +4,153 @@ const OrderInstance = require('../models/order')
 const HANDLE = require('./handle')
 const moment = require('moment')
 
-async function handleFindAll(param) {
+async function handleFindAll() {
     const sequelize = await DB()
+    const Order = OrderInstance(sequelize, Sequelize)
 
-    await new Promise((resolve, reject) => {
-        const Order = OrderInstance(sequelize, Sequelize)
-
-        Order.findAll({
-            where: {
-                delete_flag: 0
-            } 
-        }).then(rows => {
-            console.log('rows---', rows)
-            for (let row in rows) {
-                console.log(`${row.id}: ${row.status}`);
-            }
-        }).catch(res => {
-            console.log('catch---', res)
-        })
+    return new Promise((resolve, reject) => {
+        Order
+            .findAll({
+                where: {
+                    delete_flag: 0
+                }
+            })
+            .then(rows => resolve(rows))
+            .catch(res => reject(res))
     })
 }
 
-const getOne = () => {
+async function handleFindOne(id) {
+    const sequelize = await DB()
+    const Order = OrderInstance(sequelize, Sequelize)
 
+    return new Promise((resolve, reject) => {
+        Order
+            .findByPk(id)
+            .then(res => resolve(res ? res.dataValues : null))
+            .catch(res => reject(res))
+    })
 }
 
 async function handleCreate(param) {
     const sequelize = await DB()
-    
-    await new Promise((resolve, reject) => {
-        const Order = OrderInstance(sequelize, Sequelize)
+    const Order = OrderInstance(sequelize, Sequelize)
 
-        Order.create(param).then((err, res) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(res)
-            }
-        })
+    return new Promise((resolve, reject) => {
+        Order
+            .create(param)
+            .then(res => resolve(res))
+            .catch(res => reject(res))
     })
-
 }
 
-const updateOne = (param) => handleUpdate(param)
+const handleEdit = (param) => handleUpdate(param)
 
-const deleteOne = (param) => handleUpdate(param)
+const handleDelete = (param) => handleUpdate(param)
 
 async function handleUpdate(param) {
     const sequelize = await DB()
     const id = param.id
+    const Order = OrderInstance(sequelize, Sequelize)
 
     delete param.id
 
-    await new Promise((resolve, reject) => {
-        const Order = OrderInstance(sequelize, Sequelize)
-
-        Order.update(param, {
-            'where': {
-                'id': {
-                    eq: id
+    return new Promise((resolve, reject) => {
+        Order
+            .update(param, {
+                where: {
+                    id
                 }
-            }
-        }).then((err, res) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(res)
-            }
-        })
+            })
+            .then(res => resolve(res))
+            .catch(res => reject(res))
     })
 }
 
 async function handleDefine() {
     const sequelize = await DB()
-    
-    await new Promise((resolve, reject) => {
-        const Order = sequelize.define('order', { 
-            id: {
-                field: 'id',
-                primaryKey: true,
-                type: Sequelize.BIGINT,
-                allowNull: true
-            },
-            status: {
-                field: 'status',
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            createTime: {
-                field: 'create_time',
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            updateTime: {
-                field: 'update_time',
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            goodInfo: {
-                field: 'good_info',
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            extra: {
-                field: 'extra',
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            deleteFlag: {
-                field: 'delete_flag',
-                type: Sequelize.SMALLINT,
-                allowNull: false
-            },
-            accountId: {
-                field: 'account_id',
-                type: Sequelize.BIGINT,
-                allowNull: false
-            },
-            aftersaleId: {
-                field: 'aftersale_id',
-                type: Sequelize.BIGINT,
-                allowNull: true
-            }
-        }, { 
-            tableName: 'order',
-            timestamps: false, 
-            freezeTableName: true
-        })
 
-        Order.sync({
-            force: true
-        })
+    const Order = sequelize.define('order', {
+        id: {
+            field: 'id',
+            primaryKey: true,
+            type: Sequelize.BIGINT,
+            allowNull: true
+        },
+        status: {
+            field: 'status',
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        createTime: {
+            field: 'create_time',
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        updateTime: {
+            field: 'update_time',
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        goodInfo: {
+            field: 'good_info',
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        extra: {
+            field: 'extra',
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        deleteFlag: {
+            field: 'delete_flag',
+            type: Sequelize.SMALLINT,
+            allowNull: false
+        },
+        accountId: {
+            field: 'account_id',
+            type: Sequelize.BIGINT,
+            allowNull: false
+        },
+        aftersaleId: {
+            field: 'aftersale_id',
+            type: Sequelize.BIGINT,
+            allowNull: true
+        }
+    }, {
+        tableName: 'order',
+        timestamps: false,
+        freezeTableName: true
     })
-}
 
-async function handleSearch() {
-    const sequelize = await DB()
-
-    await new Promise((resolve, reject) => {
-        sequelize.authenticate().then((err, res) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(res, sequelize.models)
-            }
-        })
+    return new Promise((resolve, reject) => {
+        Order
+            .sync({
+                force: true
+            })
+            .then(() => resolve())
+            .catch(() => reject())
     })
 }
 
 async function handleDrop() {
     const sequelize = await DB()
+    const Order = OrderInstance(sequelize, Sequelize)
 
-    await new Promise((resolve, reject) => {
-        const Order = OrderInstance(sequelize, Sequelize)
-        
-        Order.drop().then((err, res) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(res)
-            }
-        })
+    return new Promise((resolve, reject) => {
+        Order
+            .drop()
+            .then(() => resolve())
+            .catch(() => reject())
     })
 }
 
 module.exports = {
     handleFindAll,
-    getOne,
+    handleFindOne,
     handleCreate,
-    updateOne,
-    deleteOne,
+    handleEdit,
+    handleDelete,
     handleDefine,
-    handleSearch,
     handleDrop
 }

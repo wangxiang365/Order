@@ -1,96 +1,163 @@
 const SQL = require('./sql')
 
-const getOrderList = (ctx, next) => {
+async function getOrderList(ctx) {
     const data = ctx.params
+    ctx.response.type = 'json'
 
-    SQL.handleFindAll(data)
-    .then(json => {
-        ctx.response.body = {
-          code: 200,
-          success: true,
-          data: json,
-          msg: ''
-        }
-    })
+    await SQL
+        .handleFindAll(data)
+        .then(json => {
+            ctx.body = {
+                code: 200,
+                success: true,
+                data: json,
+                msg: ''
+            }
+        })
+        .catch(json => {
+            ctx.body = {
+                code: 200,
+                success: false,
+                data: [],
+                msg: json
+            }
+        })
 }
 
-const getOrderById = (ctx, next) => {
+async function getOrderById(ctx) {
     const data = ctx.params
 
-    ctx.response.body = data.id
+    await SQL
+        .handleFindOne(data.id)
+        .then(json => ctx.body = {
+            code: 200,
+            success: true,
+            data: json,
+            msg: ''
+        })
+        .catch(json => ctx.body = {
+            code: 200,
+            success: false,
+            data: json,
+            msg: ''
+        })
 }
 
-const editOrder = (ctx, next) => {
+async function createOrder(ctx) {
     const data = ctx.query
 
-    SQL.handleCreate(data)
-    .then(json => {
-        ctx.response.body = {
-          code: 200,
-          success: true,
-          data: '',
-          msg: json
-        }
-    })
-}
-
-const updateOrderById = (ctx, next) => {
-    const data = ctx.params
-
     ctx.response.type = 'json'
-    ctx.response.body = {
-        data: 123
-    }
+
+    await SQL
+        .handleCreate(data)
+        .then(json => {
+            ctx.body = {
+                code: 200,
+                success: true,
+                data: '',
+                msg: ''
+            }
+        })
+        .catch(json => ctx.body = {
+            code: 200,
+            success: false,
+            data: '',
+            msg: '添加失败'
+        })
 }
 
-const deleteOrderById = (ctx, next) => {
+async function updateOrderById(ctx) {
     const data = ctx.params
+    ctx.response.type = 'json'
 
-    SQL.deleteOne({
-        id: data.id,
-        delete_flag: 1
-    }).then(json => {
-        ctx.response.body = {
-          code: 200,
-          success: true,
-          data: '',
-          msg: json
-        }
-    })
+    await SQL
+        .handleEdit({
+            id: data.id,
+            status: data.status
+        }).then(json => {
+            ctx.body = {
+                code: 200,
+                success: true,
+                data: '',
+                msg: '修改成功'
+            }
+        }).catch(json => {
+            ctx.body = {
+                code: 200,
+                success: false,
+                data: '',
+                msg: json
+            }
+        })
 }
 
-const dropOneTable = (ctx, next) => {
+async function  deleteOrderById(ctx) {
     const data = ctx.params
+    ctx.response.type = 'json'
 
-    SQL.handleDrop(data.table)
-    .then(json => {
-        ctx.response.body = {
-          code: 200,
-          success: true,
-          data: {},
-          msg: json
-        }
-    })
+    await SQL
+        .handleDelete({
+            id: data.id,
+            delete_flag: 1
+        }).then(json => {
+            ctx.body = {
+                code: 200,
+                success: true,
+                data: '',
+                msg: '删除成功'
+            }
+        }).catch(json => {
+            ctx.body = {
+                code: 200,
+                success: false,
+                data: '',
+                msg: json
+            }
+        })
 }
 
-const addOneTable = (ctx, next) => {
-    const data = ctx.params
-    
-    SQL.handleDefine(data.table)
-    .then(json => {
-        ctx.response.body = {
-          code: 200,
-          success: true,
-          data: {},
-          msg: json
-        }
-    })
+async function dropOneTable(ctx) {
+    ctx.response.type = 'json'
+
+    await SQL
+        .handleDrop()
+        .then(() => ctx.body = {
+            code: 200,
+            success: true,
+            data: '',
+            msg: '表删除成功'
+        })
+        .catch(() => ctx.body = {
+            code: 200,
+            success: false,
+            data: '',
+            msg: '表删除失败'
+        })
+}
+
+async function addOneTable(ctx) {
+    ctx.response.type = 'json'
+
+    await SQL
+        .handleDefine()
+        .then(() => ctx.body = {
+            code: 200,
+            success: true,
+            data: '',
+            msg: '表创建成功'
+        })
+        .catch(() => ctx.body = {
+            code: 200,
+            success: false,
+            data: '',
+            msg: '表创建失败'
+        })
 }
 
 module.exports = {
     getOrderList,
     getOrderById,
-    editOrder,
+    createOrder,
     updateOrderById,
     deleteOrderById,
     addOneTable,
